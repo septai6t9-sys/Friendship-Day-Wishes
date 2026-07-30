@@ -1,0 +1,327 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Friendship Day | Bye ISHAAN 💙</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;600;800;900&family=Poppins:wght@300;400;600;700&family=Sora:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- External Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <!-- Canvas Background & Cursor Trail Layer -->
+    <canvas id="bg-canvas"></canvas>
+    <canvas id="cursor-canvas"></canvas>
+
+    <!-- Notification Toast Container -->
+    <div id="notification-container"></div>
+
+    <!-- Persistent Floating Controls Bar -->
+    <div class="audio-nav-bar glass-card">
+        <button class="audio-btn" id="btn-sound-toggle" title="Toggle SFX"><i class="fas fa-volume-up"></i></button>
+        <button class="audio-btn" id="btn-theme-toggle" title="Toggle Visual Mode"><i class="fas fa-moon"></i></button>
+    </div>
+
+    <!-- ==========================================================================
+       INTRO / INITIALIZATION SCREEN
+       ========================================================================== -->
+    <div id="intro-overlay">
+        <div class="terminal-box">
+            <div class="terminal-header">
+                <div class="dot dot-red"></div>
+                <div class="dot dot-yellow"></div>
+                <div class="dot dot-green"></div>
+            </div>
+            <div class="terminal-logs" id="terminal-logs"></div>
+            <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" id="intro-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+       1. HERO SECTION
+       ========================================================================== -->
+    <section id="hero">
+        <h1 class="hero-title">Happy Friendship Day ❤️</h1>
+        <div class="hero-author">Bye ISHAAN 💙</div>
+        <div class="typewriter-text" id="hero-typewriter"></div>
+        <button class="btn-glow" onclick="scrollToSection('scanner')">
+            <i class="fas fa-rocket"></i> Launch Experience
+        </button>
+    </section>
+
+    <!-- ==========================================================================
+       2. FRIENDSHIP AI SCANNER SECTION
+       ========================================================================== -->
+    <section id="scanner">
+        <h2 class="section-title">AI Friendship Scanner</h2>
+        <p class="section-subtitle">Hold fingerprint sensor to analyze your friendship compatibility bio-metrics.</p>
+        
+        <div class="glass-card scanner-card">
+            <div class="fingerprint-btn" id="scan-trigger">
+                <i class="fas fa-fingerprint"></i>
+            </div>
+            <div id="scan-status" style="font-weight: 600; color: var(--accent-cyan); margin: 15px 0;">Touch & Hold To Scan</div>
+            
+            <div class="scan-stats">
+                <div class="stat-item">
+                    <div class="stat-name">Loyalty Level</div>
+                    <div class="stat-val" id="stat-loyalty">--</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-name">Reply Speed</div>
+                    <div class="stat-val" id="stat-reply">--</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-name">Bakchodi Quotient</div>
+                    <div class="stat-val" id="stat-bakchodi">--</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-name">Treat Probability</div>
+                    <div class="stat-val" id="stat-treat">--</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+       3. ROAST MACHINE
+       ========================================================================== -->
+    <section id="roaster">
+        <h2 class="section-title">The Best Friend Roast-O-Matic</h2>
+        <p class="section-subtitle">Press the button below for 100% organic, hand-crafted truth bombs.</p>
+
+        <div class="glass-card roast-card">
+            <p class="roast-text" id="roast-display">Click below to generate a roast!</p>
+            <button class="btn-glow" onclick="generateNextRoast()">
+                <i class="fas fa-fire"></i> Roast Me Harder!
+            </button>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+       4. COURT & SPIN WHEEL
+       ========================================================================== -->
+    <section id="court-wheel">
+        <div class="two-col-grid">
+            <!-- Friendship Court -->
+            <div class="glass-card court-card">
+                <h3 style="font-size: 1.5rem; margin-bottom: 10px; color: var(--accent-cyan);"><i class="fas fa-gavel"></i> Friendship Supreme Court</h3>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">Summon the judge for your friend's heinous crimes!</p>
+                
+                <div id="court-case" style="min-height: 100px; text-align: left; width: 100%; margin-bottom: 20px;">
+                    <div style="color: var(--primary-pink); font-weight: bold; margin-bottom: 5px;">CHARGES:</div>
+                    <div id="court-charge" style="font-size: 0.95rem; margin-bottom: 15px;">- Outstanding treats for 3+ consecutive months.</div>
+                    <div style="color: var(--accent-gold); font-weight: bold; margin-bottom: 5px;">VERDICT & PUNISHMENT:</div>
+                    <div id="court-verdict" style="font-size: 0.95rem;">Pending trial...</div>
+                </div>
+                
+                <button class="btn-glow" onclick="runCourtTrial()"><i class="fas fa-balance-scale"></i> Pass Sentence</button>
+            </div>
+
+            <!-- Spin Wheel -->
+            <div class="glass-card wheel-card">
+                <h3 style="font-size: 1.5rem; margin-bottom: 10px; color: var(--primary-pink);"><i class="fas fa-dharmachakra"></i> Lucky Treat Wheel</h3>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">Spin to determine who pays for what next!</p>
+                
+                <div class="wheel-container">
+                    <div class="wheel-pointer"></div>
+                    <div class="wheel" id="spin-wheel"></div>
+                </div>
+
+                <button class="btn-glow" onclick="spinLuckyWheel()"><i class="fas fa-sync"></i> Spin Wheel</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+       5. INTERACTIVE MINI GAMES HUB
+       ========================================================================== -->
+    <section id="games">
+        <h2 class="section-title">Friendship Arcade</h2>
+        <p class="section-subtitle">Beat the challenges to unlock legendary status achievements!</p>
+
+        <div class="games-grid">
+            <div class="glass-card game-tab" onclick="switchGame('catch')">
+                <i class="fas fa-heart-pulse" style="font-size: 2rem; color: var(--primary-pink); margin-bottom: 10px;"></i>
+                <h4>1. Catch Hearts</h4>
+            </div>
+            <div class="glass-card game-tab" onclick="switchGame('pop')">
+                <i class="fas fa-bullseye" style="font-size: 2rem; color: var(--accent-cyan); margin-bottom: 10px;"></i>
+                <h4>2. Pop Balloons</h4>
+            </div>
+            <div class="glass-card game-tab" onclick="switchGame('memory')">
+                <i class="fas fa-brain" style="font-size: 2rem; color: var(--accent-gold); margin-bottom: 10px;"></i>
+                <h4>3. Memory Match</h4>
+            </div>
+            <div class="glass-card game-tab" onclick="switchGame('reaction')">
+                <i class="fas fa-bolt" style="font-size: 2rem; color: #10b981; margin-bottom: 10px;"></i>
+                <h4>4. Reflex Speed</h4>
+            </div>
+        </div>
+
+        <div id="game-stage">
+            <!-- Active Game renders dynamically inside script.js -->
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+       6. QUIZ & PERSONALITY
+       ========================================================================== -->
+    <section id="quiz-section">
+        <h2 class="section-title">The Vibe & Personality Test</h2>
+        <p class="section-subtitle">Answer honestly to uncover your official friendship dynamic label.</p>
+
+        <div class="glass-card quiz-card" id="quiz-container">
+            <!-- Dynamic quiz content -->
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+       7. FAKE WHATSAPP CHAT
+       ========================================================================== -->
+    <section id="whatsapp">
+        <h2 class="section-title">Leaked WhatsApp Chat</h2>
+        <p class="section-subtitle">A typical 2:00 AM interaction caught on camera.</p>
+
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="chat-avatar">I</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 0.95rem; color: #fff;">Ishaan 💙</div>
+                    <div style="font-size: 0.75rem; color: #25d366;">online</div>
+                </div>
+            </div>
+            <div class="chat-body" id="chat-body">
+                <!-- Dynamic chat items -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+       8. MEMORY TIMELINE
+       ========================================================================== -->
+    <section id="timeline">
+        <h2 class="section-title">Journey Through Time</h2>
+        <p class="section-subtitle">Major milestones in our friendship lore.</p>
+
+        <div class="timeline-container">
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h4 style="color: var(--accent-cyan); margin-bottom: 5px;">Chapter 1: The Awkward Intro</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">"Hi, do you know what the homework is?" -> The innocent line that started a lifetime of chaotic mischief.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h4 style="color: var(--primary-pink); margin-bottom: 5px;">Chapter 2: The Unholy Alliance</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Realized we both share the exact same weird sense of humor and mutual hatred for early mornings.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h4 style="color: var(--accent-gold); margin-bottom: 5px;">Chapter 3: The Great Treat Heist</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Crafting complex strategies just to get someone else to buy pizza.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h4 style="color: #10b981; margin-bottom: 5px;">Chapter 4: Present Day</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Still roasting each other daily, still legendary, still unpaid debts!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+       9. SECRET LETTER & VAULT
+       ========================================================================== -->
+    <section id="secret-vault">
+        <h2 class="section-title">The Secret Vault & Letter</h2>
+        <p class="section-subtitle">Enter passcode <strong>FRIEND</strong> to unlock the confidential file.</p>
+
+        <div style="display: flex; gap: 10px; margin-bottom: 30px;">
+            <input type="text" id="vault-pass-input" placeholder="Enter Password..." style="padding: 12px 20px; border-radius: 30px; border: 1px solid var(--border-glass); background: rgba(0,0,0,0.5); color: #fff; font-size: 1rem; outline: none; text-align: center;">
+            <button class="btn-glow" onclick="unlockVault()"><i class="fas fa-key"></i> Unlock</button>
+        </div>
+
+        <div id="letter-wrapper" style="display: none; width: 100%; display: flex; justify-content: center;">
+            <div class="letter-content glass-card">
+                <h3 style="color: var(--primary-pink); margin-bottom: 15px; font-size: 1.5rem;"><i class="fas fa-heart"></i> Dearest Best Friend,</h3>
+                <p>Behind all the roasts, late replies, stolen fries, and endless memes... I want you to know how truly grateful I am to have you in my life.</p>
+                <br>
+                <p>You’ve been there through the nonsense, the late-night overthinking, and every stupid decision in between. True friends don't come around often, but when they do, life gets a whole lot brighter and funnier.</p>
+                <br>
+                <p>No matter where life takes us, remember you’re stuck with me forever!</p>
+                <br>
+                <p style="text-align: right; font-weight: bold; color: var(--accent-cyan);">- Bye ISHAAN 💙</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+       10. FRIENDSHIP PASSPORT & CERTIFICATE
+       ========================================================================== -->
+    <section id="certificate">
+        <h2 class="section-title">Official Friendship Passport</h2>
+        <p class="section-subtitle">Verified badge of honor signed and stamped on the blockchain of besties.</p>
+
+        <div class="certificate-canvas-container">
+            <canvas id="cert-canvas" width="800" height="500"></canvas>
+            <div style="margin-top: 20px;">
+                <button class="btn-glow" onclick="downloadCertificate()"><i class="fas fa-download"></i> Download Official Certificate</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+       11. ACHIEVEMENTS & GRAND FINALE
+       ========================================================================== -->
+    <section id="achievements">
+        <h2 class="section-title">Unlocked Achievements</h2>
+        <p class="section-subtitle">Your progress during this experience.</p>
+
+        <div class="badges-flex">
+            <div class="badge-chip unlocked" id="badge-1"><i class="fas fa-check-circle"></i> Best Friend Identified</div>
+            <div class="badge-chip" id="badge-2"><i class="fas fa-fire"></i> Roast Master</div>
+            <div class="badge-chip" id="badge-3"><i class="fas fa-gamepad"></i> Gamer Supreme</div>
+            <div class="badge-chip" id="badge-4"><i class="fas fa-unlock-alt"></i> Vault Cracker</div>
+        </div>
+
+        <div style="margin-top: 50px;">
+            <button class="btn-glow" style="padding: 18px 36px; font-size: 1.2rem; background: linear-gradient(135deg, #ffd700, #ff2a85);" onclick="triggerGrandFinale()">
+                <i class="fas fa-crown"></i> Trigger Grand Finale
+            </button>
+        </div>
+    </section>
+
+    <!-- Grand Outro Overlay -->
+    <div id="final-outro">
+        <div class="outro-text" id="outro-quote"></div>
+        <div style="font-size: 3rem; color: var(--primary-pink); margin-bottom: 20px;">❤️</div>
+        <h1 style="font-size: 2.5rem; font-family: var(--font-heading); color: #fff;">Happy Friendship Day ❤️</h1>
+        <h2 style="font-size: 1.5rem; color: var(--accent-cyan); margin-top: 10px;">Bye ISHAAN 💙</h2>
+    </div>
+
+    <!-- External JavaScript Application Code -->
+    <script src="script.js"></script>
+</body>
+</html>
